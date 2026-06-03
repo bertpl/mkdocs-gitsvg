@@ -38,6 +38,7 @@ dev = [
 gitsvg = "mkdocs_gitsvg.plugin:GitSvgPlugin"
 
 [project.urls]
+Documentation = "https://mkdocs-gitsvg.readthedocs.io/"
 Source = "https://github.com/bertpl/mkdocs-gitsvg"
 Changelog = "https://github.com/bertpl/mkdocs-gitsvg/blob/main/CHANGELOG.md"
 Issues = "https://github.com/bertpl/mkdocs-gitsvg/issues"
