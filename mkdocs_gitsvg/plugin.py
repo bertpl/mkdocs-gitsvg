@@ -8,15 +8,22 @@ SuperFences callable can't: a per-build id counter yielding a unique
 start clean.
 """
 
+from importlib import resources
+
 from mkdocs.config import config_options
 from mkdocs.config.base import Config
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import PluginError
 from mkdocs.plugins import BasePlugin
+from mkdocs.structure.files import File, Files
 
 from .fence import make_gitsvg_fence
 
 _SUPERFENCES = "pymdownx.superfences"
+
+# Site-relative location of the bundled stylesheet, used both as the
+# generated file's dest and as the extra_css link.
+_CSS_URI = "assets/gitsvg/style.css"
 
 
 class GitSvgConfig(Config):
@@ -62,7 +69,18 @@ class GitSvgPlugin(BasePlugin[GitSvgConfig]):
                 "format": make_gitsvg_fence(self),
             }
         )
+        if _CSS_URI not in config["extra_css"]:
+            config["extra_css"].append(_CSS_URI)
         return config
+
+    # ----------------------------------------------------------------------
+    #  Bundled stylesheet
+    # ----------------------------------------------------------------------
+    def on_files(self, files: Files, *, config: MkDocsConfig) -> Files:
+        """Emit the bundled stylesheet into the site at `_CSS_URI`."""
+        css = resources.files(__package__).joinpath("style.css").read_text(encoding="utf-8")
+        files.append(File.generated(config, _CSS_URI, content=css))
+        return files
 
     @staticmethod
     def _require_pymdownx() -> None:

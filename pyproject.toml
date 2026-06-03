@@ -21,7 +21,7 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
 ]
 dependencies = [
-    "mkdocs>=1.4",
+    "mkdocs>=1.5",
     "gitsvg>=0.2.7",
     "pymdown-extensions>=10.0",
 ]

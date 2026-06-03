@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Render `gitsvg` git-graph diagrams from fenced code blocks to inline SVG at build time.
 - Configurable handling of invalid diagrams via `on_error` (`warn` / `raise` / `show`).
+- Bundled stylesheet for rendered diagrams and error boxes, auto-linked into the built site.
 
 ### Changed
 

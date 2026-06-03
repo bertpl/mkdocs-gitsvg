@@ -51,6 +51,19 @@ def test_build_warn_mode_emits_error_box(tmp_path: Path) -> None:
     assert 'class="gitsvg-error"' in html
 
 
+def test_build_emits_and_links_stylesheet(tmp_path: Path) -> None:
+    # --- arrange ----------------------
+    config_path = _write_site(tmp_path, _DIAGRAM)
+    site_dir = tmp_path / "site"
+
+    # --- act --------------------------
+    build(load_config(str(config_path), site_dir=str(site_dir)))
+
+    # --- assert -----------------------
+    assert (site_dir / "assets" / "gitsvg" / "style.css").is_file()
+    assert "assets/gitsvg/style.css" in (site_dir / "index.html").read_text()
+
+
 def test_strict_build_fails_on_bad_diagram(tmp_path: Path) -> None:
     # --- arrange ----------------------
     config_path = _write_site(tmp_path, _BAD_DIAGRAM)

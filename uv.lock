@@ -378,7 +378,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "gitsvg", specifier = ">=0.2.7" },
-    { name = "mkdocs", specifier = ">=1.4" },
+    { name = "mkdocs", specifier = ">=1.5" },
     { name = "pymdown-extensions", specifier = ">=10.0" },
 ]
 
