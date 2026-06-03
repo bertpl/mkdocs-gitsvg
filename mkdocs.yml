@@ -1,0 +1,11 @@
+site_name: mkdocs-gitsvg
+site_description: Render gitsvg git-graph diagrams from fenced code blocks to inline SVG.
+repo_url: https://github.com/bertpl/mkdocs-gitsvg
+theme:
+  name: mkdocs
+plugins:
+  - gitsvg
+nav:
+  - Home: index.md
+  - Examples: examples.md
+  - Configuration: configuration.md

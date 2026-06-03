@@ -64,6 +64,22 @@ def test_build_emits_and_links_stylesheet(tmp_path: Path) -> None:
     assert "assets/gitsvg/style.css" in (site_dir / "index.html").read_text()
 
 
+def test_shipped_demo_site_builds_strict_clean(tmp_path: Path) -> None:
+    # --- arrange ----------------------
+    repo_root = Path(__file__).resolve().parents[1]
+    site_dir = tmp_path / "site"
+
+    # --- act --------------------------
+    result = CliRunner().invoke(
+        cli,
+        ["build", "--strict", "-f", str(repo_root / "mkdocs.yml"), "-d", str(site_dir)],
+    )
+
+    # --- assert -----------------------
+    assert result.exit_code == 0, result.output
+    assert "<svg" in (site_dir / "index.html").read_text()
+
+
 def test_strict_build_fails_on_bad_diagram(tmp_path: Path) -> None:
     # --- arrange ----------------------
     config_path = _write_site(tmp_path, _BAD_DIAGRAM)

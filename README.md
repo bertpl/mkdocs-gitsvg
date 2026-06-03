@@ -8,8 +8,8 @@ diagrams from fenced code blocks to inline SVG at build time.
 [![Python](https://img.shields.io/pypi/pyversions/mkdocs-gitsvg.svg)](https://pypi.org/project/mkdocs-gitsvg/)
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/bertpl/mkdocs-gitsvg/blob/main/LICENSE)
 
-> **Status:** early development. The package scaffold and release pipeline are
-> in place; diagram rendering is being built out.
+No client-side JavaScript: diagrams are rendered server-side at build time, so
+they work in any browser and in offline / PDF exports.
 
 ## Installation
 
@@ -38,6 +38,25 @@ is a [gitsvg](https://github.com/bertpl/gitsvg) JSONL op-stream:
 ````
 
 The block renders to an inline SVG git graph in the built site.
+
+## Configuration
+
+The plugin needs no configuration. Available options (with defaults):
+
+```yaml
+plugins:
+  - gitsvg:
+      fence_name: gitsvg          # fenced-block language tag to intercept
+      css_class: gitsvg-diagram   # class on the wrapper <div>
+      on_error: warn              # warn | raise | show
+```
+
+`on_error` controls what happens when a diagram fails to render: `warn`
+(default) shows an error box and logs a warning (so `mkdocs build --strict`
+fails), `raise` fails the build immediately, and `show` shows the box silently.
+A bundled stylesheet is linked automatically. See the
+[documentation site](https://github.com/bertpl/mkdocs-gitsvg) for the full
+reference.
 
 ## License
 
