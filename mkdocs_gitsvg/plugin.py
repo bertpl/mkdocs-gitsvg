@@ -1,13 +1,75 @@
-"""The mkdocs-gitsvg MkDocs plugin.
+"""The mkdocs-gitsvg MkDocs plugin: wiring + build-scoped state.
 
-Scaffold placeholder: a no-op MkDocs ``BasePlugin`` subclass registered
-under the ``gitsvg`` plugin name (via the ``mkdocs.plugins`` entry
-point) so MkDocs discovers it. Fenced-block rendering, configuration,
-and styling are added in later layers.
+`GitSvgPlugin` auto-registers a SuperFences custom fence so authors
+activate the plugin with just ``plugins: [gitsvg]`` — no hand-editing of
+``markdown_extensions``. The plugin owns the cross-fence state a bare
+SuperFences callable can't: a per-build id counter yielding a unique
+``id_prefix`` per diagram, reset each build so ``mkdocs serve`` rebuilds
+start clean.
 """
 
+from mkdocs.config import config_options
+from mkdocs.config.base import Config
+from mkdocs.config.defaults import MkDocsConfig
+from mkdocs.exceptions import PluginError
 from mkdocs.plugins import BasePlugin
 
+from .fence import make_gitsvg_fence
 
-class GitSvgPlugin(BasePlugin):
-    """No-op MkDocs plugin placeholder for mkdocs-gitsvg."""
+_SUPERFENCES = "pymdownx.superfences"
+
+
+class GitSvgConfig(Config):
+    """Typed configuration schema for `GitSvgPlugin`."""
+
+    fence_name = config_options.Type(str, default="gitsvg")
+    css_class = config_options.Type(str, default="gitsvg-diagram")
+    on_error = config_options.Choice(("raise", "warn", "show"), default="warn")
+
+
+class GitSvgPlugin(BasePlugin[GitSvgConfig]):
+    """Renders ` ```gitsvg ` fenced blocks to inline SVG at build time."""
+
+    # ----------------------------------------------------------------------
+    #  Build-scoped id namespacing
+    # ----------------------------------------------------------------------
+    def next_id_prefix(self) -> str:
+        """Return a unique-per-build SVG id prefix (``gsvg1-``, ``gsvg2-``, …)."""
+        self._id_counter += 1
+        return f"gsvg{self._id_counter}-"
+
+    def on_pre_build(self, *, config: MkDocsConfig) -> None:
+        """Reset the id counter so each build (and serve rebuild) starts clean."""
+        self._id_counter = 0
+
+    # ----------------------------------------------------------------------
+    #  Fence registration
+    # ----------------------------------------------------------------------
+    def on_config(self, config: MkDocsConfig) -> MkDocsConfig:
+        """Register the gitsvg custom fence, auto-wiring SuperFences."""
+        self._id_counter = 0
+        self._require_pymdownx()
+        if _SUPERFENCES not in config["markdown_extensions"]:
+            config["markdown_extensions"].append(_SUPERFENCES)
+        fences = config["mdx_configs"].setdefault(_SUPERFENCES, {}).setdefault("custom_fences", [])
+        # Drop a stale entry from a previous serve rebuild before re-adding,
+        # so the fence is registered exactly once.
+        fences[:] = [fence for fence in fences if fence.get("name") != self.config.fence_name]
+        fences.append(
+            {
+                "name": self.config.fence_name,
+                "class": self.config.css_class,
+                "format": make_gitsvg_fence(self),
+            }
+        )
+        return config
+
+    @staticmethod
+    def _require_pymdownx() -> None:
+        """Fail with an actionable message if pymdown-extensions is missing."""
+        try:
+            import pymdownx.superfences  # noqa: F401
+        except ImportError as err:
+            raise PluginError(
+                "mkdocs-gitsvg requires pymdown-extensions; install it to use the gitsvg plugin."
+            ) from err
