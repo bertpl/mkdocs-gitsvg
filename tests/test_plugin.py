@@ -8,7 +8,7 @@ from mkdocs.config import load_config
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import PluginError
 
-from mkdocs_gitsvg.plugin import GitSvgPlugin
+from mkdocs_gitsvg.plugin import _CSS_URI, GitSvgPlugin
 
 _SUPERFENCES = "pymdownx.superfences"
 
@@ -117,3 +117,16 @@ def test_missing_pymdownx_raises_clear_error(tmp_path: Path, monkeypatch: pytest
     # --- act / assert -----------------
     with pytest.raises(PluginError, match="pymdown-extensions"):
         plugin.on_config(config)
+
+
+def test_on_config_links_stylesheet(tmp_path: Path) -> None:
+    # --- arrange ----------------------
+    plugin = _plugin()
+    config = _config(tmp_path)
+
+    # --- act --------------------------
+    plugin.on_config(config)
+    plugin.on_config(config)  # rebuild: must not double-link
+
+    # --- assert -----------------------
+    assert config["extra_css"].count(_CSS_URI) == 1
