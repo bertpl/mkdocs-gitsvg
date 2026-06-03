@@ -22,7 +22,7 @@ classifiers = [
 ]
 dependencies = [
     "mkdocs>=1.4",
-    "gitsvg",
+    "gitsvg>=0.2.7",
     "pymdown-extensions>=10.0",
 ]
 

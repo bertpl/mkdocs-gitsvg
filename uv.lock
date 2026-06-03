@@ -185,16 +185,16 @@ wheels = [
 
 [[package]]
 name = "gitsvg"
-version = "0.2.6"
+version = "0.2.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "drawsvg" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/12/fd/4b4f3db5f30caea20ba9d92782f8d4de81901a47aea71d74181d2e4a06f1/gitsvg-0.2.6.tar.gz", hash = "sha256:e3855176bd8fe45a949db988540fb00a84c9820220cde483991c86376c3aac97", size = 140036, upload-time = "2026-06-01T17:52:55.195Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/29/59/b1202dc495f143b49d8808156c628b438ed11e31e2ef2b104373d4fc42e2/gitsvg-0.2.7.tar.gz", hash = "sha256:17283d52e830820c07f1a98048892b82126213cd8d39d9201016b97bd6c24238", size = 146645, upload-time = "2026-06-03T13:29:55.19Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b1/c3/c5a0fd8dc682a5c5b66a21b5584640271e0e47b1594cbb825ada01a86c8a/gitsvg-0.2.6-py3-none-any.whl", hash = "sha256:92eff53d31a9a358e2983ec40aab4420cf8a16e760454f09d04caeff42aae379", size = 212033, upload-time = "2026-06-01T17:52:53.842Z" },
+    { url = "https://files.pythonhosted.org/packages/fa/d2/0f3aef2c09293c0e6df0bf920c51a3b0ce8bdbf0401f43297364efd8461b/gitsvg-0.2.7-py3-none-any.whl", hash = "sha256:561241ddc6fd045446f9366156a41802e9a2e8a640e61bd5206711a94b98b9c8", size = 221898, upload-time = "2026-06-03T13:29:53.38Z" },
 ]
 
 [[package]]
@@ -377,7 +377,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "gitsvg" },
+    { name = "gitsvg", specifier = ">=0.2.7" },
     { name = "mkdocs", specifier = ">=1.4" },
     { name = "pymdown-extensions", specifier = ">=10.0" },
 ]
