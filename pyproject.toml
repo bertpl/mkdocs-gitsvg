@@ -1,6 +1,6 @@
 [project]
 name = "mkdocs-gitsvg"
-version = "0.0.0"
+version = "0.0.1"
 description = "MkDocs plugin that renders gitsvg git-graph diagrams from fenced code blocks to inline SVG."
 readme = "README.md"
 license = "MIT"
